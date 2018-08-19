@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint --fix ./src",
+    "clear": "rm -rf public/assets",
     "dev": "nodemon --watch ./src --exec \"babel-node\" ./src/server/index.js",
-    "build": "rm -rf public/assets && NODE_ENV=production babel-node ./node_modules/.bin/webpack --progress --hide-modules --config ./webpack.config.js",
+    "build:dev": "npm run clear && NODE_ENV=development babel-node ./node_modules/.bin/webpack --progress --hide-modules --config ./webpack.config.js",
+    "build:prod": "npm run clear && NODE_ENV=production babel-node ./node_modules/.bin/webpack --progress --hide-modules --config ./webpack.config.js",
     "start": "NODE_ENV=production node ./src/server/index.js"
   },
   "author": "Money Nguyen <moneynguyen0o0@gmail.com>",
