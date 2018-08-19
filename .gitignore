@@ -1,0 +1,14 @@
+docs
+coverage
+node_modules
+package-lock.json
+npm-debug.log
+public/assets
+webpack-assets.json
+.DS_Store
+.npm
+.tmp
+.env
+.idea
+.vscode
+.env

@@ -1,0 +1,33 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ],
+    "react",
+    "stage-3"
+  ],
+  "plugins": [
+    "loadable-components/babel",
+    "dynamic-import-node",
+    "transform-class-properties",
+    ["styled-components",
+      {
+        "ssr": true,
+        "minify": true
+      }
+    ],
+    [
+      "module-resolver",
+      {
+        "root": ["./src"],
+        "extensions": [".js", ".json"]
+      }
+    ]
+  ],
+  "ignore": ["node_modules", "public"]
+}
