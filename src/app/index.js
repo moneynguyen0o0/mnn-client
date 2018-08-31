@@ -1,11 +1,32 @@
 import React from 'react';
 import Helmet from 'react-helmet';
-import { Switch, Route } from 'react-router-dom';
 import styled, { injectGlobal, ThemeProvider } from 'styled-components';
 
-import { Header } from './components';
-import appConfig from './config/app';
-import routes from '../routes';
+import routes from 'routes';
+import config from './config/app';
+import theme from './shared/themes/default';
+import { Header, Main } from './components';
+
+const menu = [
+  {
+    url: '/',
+    text: 'Home'
+  },
+  {
+    url: '/users',
+    text: 'Users'
+  },
+  {
+    url: '/login',
+    text: 'Log in',
+    authenticated: false
+  },
+  {
+    url: '/logout',
+    text: 'Log out',
+    authenticated: true
+  }
+];
 
 injectGlobal`
   body {
@@ -21,39 +42,16 @@ injectGlobal`
   }
 `;
 
-const theme = {
-  palette: {
-    primary: '#1976d2',
-    danger: '#d32f2f',
-    alert: '#ffa000',
-    success: '#388e3c'
-  },
-  fonts: {
-    primary: 'Helvetica Neue, Helvetica, Roboto, sans-serif',
-    pre: 'Consolas, Liberation Mono, Menlo, Courier, monospace',
-    quote: 'Georgia, serif'
-  }
-};
-
-const Main = styled.main`
-  padding: 1em 4em;
+const Wrapper = styled.div`
   background: white;
 `;
 
 export default () => (
   <ThemeProvider theme={ theme }>
-    <div>
-      <Helmet { ...appConfig } />
-      <Header />
-      <Main>
-        <Switch>
-          {
-            routes.map((route, index) => (
-              <Route key={ index } { ...route } />
-            ))
-          }
-        </Switch>
-      </Main>
-    </div>
+    <Wrapper>
+      <Helmet { ...config } />
+      <Header menu={ menu } />
+      <Main routes={ routes } />
+    </Wrapper>
   </ThemeProvider>
 );

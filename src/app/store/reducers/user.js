@@ -3,25 +3,43 @@ import { createSelector } from 'reselect';
 // TYPES
 
 export const types = {
+  USER_LOGIN_REQUEST: 'USER_LOGIN_REQUEST',
+  USER_LOGOUT_REQUEST: 'USER_LOGOUT_REQUEST',
+  USER_LOGOUT_SUCCESS: 'USER_LOGOUT_SUCCESS',
+
   USERS_REQUEST: 'USERS_REQUEST',
   USERS_RECEIVE: 'USERS_RECEIVE',
+
   USER_REQUEST: 'USER_REQUEST',
-  USER_RECEIVE: 'USER_RECEIVE'
+  USER_REQUESTING: 'USER_REQUESTING',
+  USER_RECEIVE_SUCCESS: 'USER_RECEIVE_SUCCESS',
+  USER_RECEIVE_ERROR: 'USER_RECEIVE_ERROR'
 };
 
 // ACTIONS
 
+const requestLogin = user => ({ type: types.USER_LOGIN_REQUEST, user });
+const requestLogout = callback => ({ type: types.USER_LOGOUT_REQUEST, callback });
+const logoutSuccess = () => ({ type: types.USER_LOGOUT_SUCCESS });
+
 const requestUsers = () => ({ type: types.USERS_REQUEST });
 const receiveUsers = payload => ({ type: types.USERS_RECEIVE, payload });
 
-const requestUser = (id) => ({ type: types.USER_REQUEST, id });
-const receiveUser = payload => ({ type: types.USER_RECEIVE, payload });
+const requestUser = id => ({ type: types.USER_REQUEST, id });
+const requestingUser = () => ({ type: types.USER_REQUESTING });
+const receiveUserSuccess = payload => ({ type: types.USER_RECEIVE_SUCCESS, payload });
+const receiveUserError = payload => ({ type: types.USER_RECEIVE_ERROR, payload });
 
 export const actions = {
+  requestLogin,
+  requestLogout,
+  logoutSuccess,
   requestUsers,
   receiveUsers,
   requestUser,
-  receiveUser
+  requestingUser,
+  receiveUserSuccess,
+  receiveUserError
 };
 
 // SELECTORS
@@ -40,34 +58,51 @@ export const selectors = {
 
 // REDUCERS
 
-export const initialState = {
-  users: [],
-  user: {},
-  isLoading: false,
-  error: null
-};
-
-const users = (state = [], action = {}) => {
+const handleUsers = (state = [], action = {}) => {
   switch (action.type) {
-  case types.USERS_RECEIVE:
-    return action.payload;
+    case types.USERS_RECEIVE:
+      return action.payload;
 
-  default:
-    return state;
+    default:
+      return state;
   }
 };
 
-const user = (state = {}, action = {}) => {
-  switch (action.type) {
-  case types.USER_RECEIVE:
-    return action.payload;
+const initialSessionState = {
+  data: null,
+  authenticated: false,
+  isWaiting: false,
+  error: null
+};
 
-  default:
-    return state;
+const handleSession = (state = initialSessionState, action = {}) => {
+  switch (action.type) {
+    case types.USER_REQUESTING:
+      return {
+        ...initialSessionState,
+        isWaiting: true
+      };
+    case types.USER_RECEIVE_SUCCESS:
+      return {
+        ...initialSessionState,
+        authenticated: true,
+        data: action.payload
+      };
+    case types.USER_RECEIVE_ERROR:
+      return {
+        ...initialSessionState,
+        error: action.payload
+      };
+
+    case types.USER_LOGOUT_SUCCESS:
+      return initialSessionState;
+
+    default:
+      return state;
   }
 };
 
 export {
-  users,
-  user
+  handleUsers as users,
+  handleSession as session
 };

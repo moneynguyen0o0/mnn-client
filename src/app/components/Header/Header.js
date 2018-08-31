@@ -1,19 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import Logo from './Logo';
 import Nav from './Nav';
-
-const links = [
-  {
-    url: '/',
-    text: 'Home'
-  },
-  {
-    url: '/users',
-    text: 'Users'
-  }
-];
 
 const StyledLogo = styled(Logo)`
   margin-left: 15px;
@@ -31,9 +21,18 @@ const Wrapper = styled.header`
   background-color: wheat;
 `;
 
-export default () => (
-  <Wrapper>
-    <StyledLogo />
-    <StyledNav links={ links } />
-  </Wrapper>
-);
+const Header = ({ menu, session }) => {
+  const { authenticated } = session;
+  const filteredMenu = authenticated ?
+    menu.filter(item => item.authenticated || item.authenticated === undefined) :
+    menu.filter(item => !item.authenticated);
+
+  return (
+    <Wrapper>
+      <StyledLogo />
+      <StyledNav menu={ filteredMenu } />
+    </Wrapper>
+  );
+};
+
+export default connect(({ session }) => ({ session }))(Header);

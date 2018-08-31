@@ -1,5 +1,7 @@
 import {
   Home,
+  Login,
+  Logout,
   UserList,
   UserDetail,
   NotFound
@@ -15,12 +17,22 @@ export default [
     component: Home
   },
   {
+    path: '/login',
+    component: Login
+  },
+  {
+    path: '/logout',
+    component: Logout,
+    requiresAuth: true
+  },
+  {
     path: '/users',
     component: UserList,
     exact: true,
     loadData: () => [
       [userSagaWorkers.requestUsers]
-    ]
+    ],
+    requiresAuth: true
   },
   {
     path: '/users/:id',
@@ -28,7 +40,8 @@ export default [
     exact: true,
     loadData: ({ params }) => [
       [userSagaWorkers.requestUser, params.id]
-    ]
+    ],
+    requiresAuth: true
   },
   {
     component: NotFound

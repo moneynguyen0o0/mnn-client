@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const NavLink = ({ link, className }) => <Link to={ link.url } className={ className }>{link.text}</Link>;
+const NavLink = ({ item, className }) => <Link to={ item.url } className={ className }>{item.text}</Link>;
 
 const StyledLink = styled(NavLink)`
   color: white;
@@ -17,10 +17,10 @@ const LinkWrapper = styled.li`
   margin-left: 10px;
 `;
 
-export default ({ links = [], ...props }) => (
+export default ({ menu = [], ...props }) => (
   <Nav { ...props }>
     <ul>
-      { links.map((link, index) => <LinkWrapper key={ index }><StyledLink link={ link } /></LinkWrapper>) }
+      { menu.map((item, index) => <LinkWrapper key={ index }><StyledLink item={ item } /></LinkWrapper>) }
     </ul>
   </Nav>
 );
