@@ -4,6 +4,7 @@ import createHistory from 'history/createMemoryHistory';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter, matchPath } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { CookiesProvider } from 'react-cookie';
 import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 import { getLoadableState } from 'loadable-components/server';
 
@@ -50,9 +51,11 @@ export default () => {
         const RootComponent = (
           <Provider store={ store }>
             <StaticRouter location={ location } context={ context }>
-              <StyleSheetManager sheet={ sheet.instance }>
-                <App />
-              </StyleSheetManager>
+              <CookiesProvider cookies={req.universalCookies}>
+                <StyleSheetManager sheet={ sheet.instance }>
+                  <App />
+                </StyleSheetManager>
+              </CookiesProvider>
             </StaticRouter>
           </Provider>
         );

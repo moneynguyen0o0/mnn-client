@@ -2,6 +2,7 @@ import React from 'react';
 import { hydrate } from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
+import { CookiesProvider } from 'react-cookie';
 import { loadComponents } from 'loadable-components';
 import createHistory from 'history/createBrowserHistory';
 
@@ -33,7 +34,9 @@ loadComponents().then(() => {
   hydrate(
     <Provider store={ store }>
       <ConnectedRouter history={ history }>
-        <App />
+        <CookiesProvider>
+          <App />
+        </CookiesProvider>
       </ConnectedRouter>
     </Provider>,
     document.getElementById('app')

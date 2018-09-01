@@ -4,6 +4,7 @@ import cors from 'cors';
 import compress from 'compression';
 import helmet from 'helmet';
 import favicon from 'serve-favicon';
+import cookiesMiddleware from 'universal-cookie-express';
 
 import renderLayout from './middlewares/renderLayout';
 import { notFound, handleErrors } from './middlewares/errorHandler';
@@ -23,6 +24,9 @@ if (isProduction) {
 
 app.use(favicon(path.resolve(process.cwd(), 'public/favicon.ico')));
 app.use(express.static(path.resolve(process.cwd(), 'public'), { maxAge: 86400000 }));
+
+// Hook cookies get/set on Express for server-rendering
+app.use(cookiesMiddleware());
 
 // render html
 app.use(renderLayout());
