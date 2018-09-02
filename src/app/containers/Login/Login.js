@@ -32,10 +32,7 @@ class Login extends Component {
     login(user, (auth) => {
       cookies.set('auth', auth, {
         path: '/',
-        expires: new Date(auth.expires),
-        // maxAge: 3600,
-        // secure: true,
-        // httpOnly: true
+        expires: new Date(auth.expires)
       });
     });
   }
