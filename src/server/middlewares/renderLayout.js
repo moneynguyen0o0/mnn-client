@@ -16,7 +16,7 @@ import routes from 'routes';
 
 import assets from '../../../public/webpack-assets.json';
 
-const loadBranchData = (store, location) => {
+const loadBranchData = (store, location, auth) => {
   let preloaders;
 
   routes.some(route => {
@@ -24,7 +24,7 @@ const loadBranchData = (store, location) => {
     if (match){
       const { loadData } = route;
       if (loadData) {
-        preloaders = loadData(match);
+        preloaders = loadData({ match, auth });
       }
     }
     return match;
@@ -39,11 +39,19 @@ const loadBranchData = (store, location) => {
 
 export default () => {
   return (req, res, next) => {
+    const universalCookies = req.universalCookies;
+    const auth = JSON.parse(universalCookies.cookies.auth || null);
+
     const history = createHistory();
-    const store = configureStore(history);
+    const store = configureStore({
+      session: {
+        data: auth,
+        authenticated: !!auth
+      }
+    }, history);
     const location = req.url;
 
-    loadBranchData(store, location).then(async () => {
+    loadBranchData(store, location, auth).then(async () => {
       try {
         const context = {};
         // styled-components supports concurrent ssr, with stylesheet rehydration
@@ -51,7 +59,7 @@ export default () => {
         const RootComponent = (
           <Provider store={ store }>
             <StaticRouter location={ location } context={ context }>
-              <CookiesProvider cookies={req.universalCookies}>
+              <CookiesProvider cookies={ universalCookies }>
                 <StyleSheetManager sheet={ sheet.instance }>
                   <App />
                 </StyleSheetManager>
@@ -67,10 +75,11 @@ export default () => {
         const loadableState = await getLoadableState(RootComponent);
 
         const markup = renderToString(RootComponent);
+        const initialState = store.getState();
         const styleTags = sheet.getStyleTags();
-        const state = store.getState();
         const helmet = Helmet.renderStatic();
-        const body = template({ markup, state, assets, helmet, styleTags, loadableState });
+
+        const body = template({ markup, initialState, assets, helmet, styleTags, loadableState });
 
         console.log(body);
 

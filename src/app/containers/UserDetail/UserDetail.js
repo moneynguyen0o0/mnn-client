@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import { object, func } from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+
+import { actions as userActions } from 'app/store/reducers/user';
 
 const Wrapper = styled.div`
   background: orange;
@@ -11,30 +13,41 @@ class UserDetailPage extends PureComponent {
   static displayName = 'UserDetailPage';
 
   static propTypes = {
-    user: PropTypes.object
+    match: object.isRequired,
+    requestUser: func.isRequired,
+    session: object,
+    user: object
+  }
+
+  componentDidMount() {
+    const {
+      session: {
+        authenticated,
+        data: auth
+      },
+      match,
+      user,
+      requestUser
+    } = this.props;
+    
+    if (!user.data && authenticated) {
+      requestUser(match.params.id, auth);
+    }
   }
 
   render() {
-    const { user } = this.props;
+    const { fullname = '' } = this.props.user.data || {};
 
     return (
       <Wrapper>
-        { user.fullname }
+        { fullname }
       </Wrapper>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  const {
-    user
-  } = state;
+const mapStateToProps = ({ session, user }) => ({ session, user });
 
-  return {
-    user
-  };
-};
-
-export default connect(
-  mapStateToProps
-)(UserDetailPage);
+export default connect( mapStateToProps, {
+  requestUser: userActions.requestUser
+})(UserDetailPage);

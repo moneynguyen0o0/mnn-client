@@ -1,22 +1,27 @@
 import React, { Component } from 'react';
-import { object, func } from 'prop-types';
+import { object, func, instanceOf } from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { withCookies, Cookies } from 'react-cookie';
 
-import { actions as userActions } from 'app/store/reducers/user';
+import { actions as sessionActions } from 'app/store/reducers/session';
 
 class Logout extends Component {
   static displayName = 'Logout';
 
   static propTypes = {
+    cookies: instanceOf(Cookies).isRequired,
     history: object.isRequired,
     logout: func.isRequired
   }
 
   componentDidMount() {
-    const { logout, history } = this.props;
-    
-    logout(() => history.push('/'));
+    const { logout, history, cookies } = this.props;
+
+    logout(() => {
+      cookies.remove('auth');
+      history.push('/');
+    });
   }
 
   render() {
@@ -28,6 +33,6 @@ class Logout extends Component {
   }
 }
 
-export default connect(null, {
-  logout: userActions.requestLogout
-})(withRouter(Logout));
+export default withRouter(withCookies(connect(null, {
+  logout: sessionActions.requestLogout
+})(Logout)));

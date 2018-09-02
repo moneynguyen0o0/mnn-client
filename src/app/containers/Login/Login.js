@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
-import { object, func } from 'prop-types';
+import { object, func, instanceOf } from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { withCookies, Cookies } from 'react-cookie';
 
-import { actions as userActions } from 'app/store/reducers/user';
+import { actions as sessionActions } from 'app/store/reducers/session';
+
 import Input from 'app/components/Input';
 
 class Login extends Component {
   static displayName = 'Login';
 
   static propTypes = {
+    cookies: instanceOf(Cookies).isRequired,
     history: object.isRequired,
     session: object.isRequired,
     login: func.isRequired
@@ -23,10 +26,18 @@ class Login extends Component {
   }
 
   onSubmit = () => {
-    const { login } = this.props;
+    const { login, cookies } = this.props;
     const { user } = this.state;
 
-    login(user);
+    login(user, (auth) => {
+      cookies.set('auth', auth, {
+        path: '/',
+        expires: new Date(auth.expires),
+        // maxAge: 3600,
+        // secure: true,
+        // httpOnly: true
+      });
+    });
   }
 
   onChange = (e) => {
@@ -91,6 +102,6 @@ class Login extends Component {
 
 const mapStateToProps = ({ session }) => ({ session });
 
-export default connect(mapStateToProps, {
-  login: userActions.requestLogin
-})(Login);
+export default withCookies(connect(mapStateToProps, {
+  login: sessionActions.requestLogin
+})(Login));

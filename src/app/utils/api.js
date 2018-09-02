@@ -2,8 +2,8 @@ import request from './request';
 import { getAuthHeader } from './auth';
 
 const login = (email, password) => request({ method: 'post', url: '/auth/login', data: { email, password } });
-const fetchUsers = () => request({ url: '/users', headers: getAuthHeader() });
-const findUser = (id) => request({ url: `/users/${id}` });
+const fetchUsers = (auth) => request({ url: '/users', headers: getAuthHeader(auth) });
+const findUser = (id, auth) => request({ url: `/users/${id}`, headers: getAuthHeader(auth) });
 
 export {
   fetchUsers,

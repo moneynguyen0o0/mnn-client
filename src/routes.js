@@ -29,8 +29,8 @@ export default [
     path: '/users',
     component: UserList,
     exact: true,
-    loadData: () => [
-      [userSagaWorkers.requestUsers]
+    loadData: ({ auth }) => [
+      [userSagaWorkers.requestUsers, { auth }]
     ],
     requiresAuth: true
   },
@@ -38,8 +38,8 @@ export default [
     path: '/users/:id',
     component: UserDetail,
     exact: true,
-    loadData: ({ params }) => [
-      [userSagaWorkers.requestUser, params.id]
+    loadData: ({ match, auth }) => [
+      [userSagaWorkers.requestUser, { id: match.params.id, auth } ]
     ],
     requiresAuth: true
   },
