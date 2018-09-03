@@ -42,28 +42,28 @@ const initialSessionState = {
 
 const handleSession = (state = initialSessionState, action = {}) => {
   switch (action.type) {
-    case types.LOGIN_REQUESTING:
-      return {
-        ...initialSessionState,
-        isWaiting: true
-      };
-    case types.LOGIN_RECEIVE_SUCCESS:
-      return {
-        ...initialSessionState,
-        authenticated: true,
-        data: action.payload
-      };
-    case types.LOGIN_RECEIVE_ERROR:
-      return {
-        ...initialSessionState,
-        error: action.payload
-      };
+  case types.LOGIN_REQUESTING:
+    return {
+      ...initialSessionState,
+      isWaiting: true
+    };
+  case types.LOGIN_RECEIVE_SUCCESS:
+    return {
+      ...initialSessionState,
+      authenticated: true,
+      data: action.payload
+    };
+  case types.LOGIN_RECEIVE_ERROR:
+    return {
+      ...initialSessionState,
+      error: action.payload
+    };
 
-    case types.LOGOUT_SUCCESS:
-      return initialSessionState;
+  case types.LOGOUT_SUCCESS:
+    return initialSessionState;
 
-    default:
-      return state;
+  default:
+    return state;
   }
 };
 

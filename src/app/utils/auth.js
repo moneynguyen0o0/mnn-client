@@ -1,7 +1,5 @@
-import store from 'store';
-
 const isUserAuthenticated = auth => {
-  return auth && user.expires > Date.now();
+  return auth && auth.expires > Date.now();
 };
 
 const getAuthHeader = auth => {

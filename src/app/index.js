@@ -1,5 +1,6 @@
 import React from 'react';
 import Helmet from 'react-helmet';
+import { connect } from 'react-redux';
 import styled, { injectGlobal, ThemeProvider } from 'styled-components';
 
 import routes from 'routes';
@@ -46,12 +47,17 @@ const Wrapper = styled.div`
   background: white;
 `;
 
-export default () => (
+const App = ({ session, location }) => (
   <ThemeProvider theme={ theme }>
     <Wrapper>
       <Helmet { ...config } />
-      <Header menu={ menu } />
-      <Main routes={ routes } />
+      <Header menu={ menu } session={ session } />
+      <Main routes={ routes } location={ location } session={ session } />
     </Wrapper>
   </ThemeProvider>
 );
+
+export default connect(({ session, router }) => ({
+  location: router.location,
+  session: session
+}))(App);

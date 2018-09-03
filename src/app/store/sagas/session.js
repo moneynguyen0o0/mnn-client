@@ -1,6 +1,6 @@
-import { takeLatest, call, put, select } from 'redux-saga/effects';
+import { takeLatest, call, put } from 'redux-saga/effects';
 
-import { actions, selectors, types } from '../reducers/session';
+import { actions, types } from '../reducers/session';
 import * as Api from 'app/utils/api';
 
 // WORKERS

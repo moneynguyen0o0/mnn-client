@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import Logo from './Logo';
@@ -21,7 +20,7 @@ const Wrapper = styled.header`
   background-color: wheat;
 `;
 
-const Header = ({ menu, session }) => {
+export default ({ menu, session }) => {
   const { authenticated } = session;
   const filteredMenu = authenticated ?
     menu.filter(item => item.authenticated || item.authenticated === undefined) :
@@ -34,5 +33,3 @@ const Header = ({ menu, session }) => {
     </Wrapper>
   );
 };
-
-export default connect(({ session }) => ({ session }))(Header);

@@ -49,11 +49,11 @@ export const selectors = {
 
 const handleUsers = (state = [], action = {}) => {
   switch (action.type) {
-    case types.USERS_RECEIVE:
-      return action.payload;
+  case types.USERS_RECEIVE:
+    return action.payload;
 
-    default:
-      return state;
+  default:
+    return state;
   }
 };
 
@@ -65,24 +65,24 @@ const initialUserState = {
 
 const handleUer = (state = initialUserState, action = {}) => {
   switch (action.type) {
-    case types.USER_REQUESTING:
-      return {
-        ...initialUserState,
-        isWaiting: true
-      };
-    case types.USER_RECEIVE_SUCCESS:
-      return {
-        ...initialUserState,
-        data: action.payload
-      };
-    case types.USER_RECEIVE_ERROR:
-      return {
-        ...initialUserState,
-        error: action.payload
-      };
+  case types.USER_REQUESTING:
+    return {
+      ...initialUserState,
+      isWaiting: true
+    };
+  case types.USER_RECEIVE_SUCCESS:
+    return {
+      ...initialUserState,
+      data: action.payload
+    };
+  case types.USER_RECEIVE_ERROR:
+    return {
+      ...initialUserState,
+      error: action.payload
+    };
 
-    default:
-      return state;
+  default:
+    return state;
   }
 };
 

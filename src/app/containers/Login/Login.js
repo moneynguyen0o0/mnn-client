@@ -5,8 +5,7 @@ import { Redirect } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 
 import { actions as sessionActions } from 'app/store/reducers/session';
-
-import Input from 'app/components/Input';
+import LoginForm from 'app/components/LoginForm';
 
 class Login extends Component {
   static displayName = 'Login';
@@ -18,32 +17,15 @@ class Login extends Component {
     login: func.isRequired
   }
 
-  state = {
-    user: {
-      email: '',
-      password: ''
-    }
-  }
-
-  onSubmit = () => {
+  onSubmit = user => {
     const { login, cookies } = this.props;
-    const { user } = this.state;
 
-    login(user, (auth) => {
+    login(user, auth => {
       cookies.set('auth', auth, {
         path: '/',
         expires: new Date(auth.expires)
       });
     });
-  }
-
-  onChange = (e) => {
-    const { value, name } = e.target;
-    const { user } = this.state;
-
-    user[name] = value;
-
-    this.setState({ user });
   }
 
   render() {
@@ -64,34 +46,10 @@ class Login extends Component {
       return <Redirect to={ from } />;
     }
 
-    const {
-      user: { email, password }
-    } = this.state;
-
-    const { message, errors } = error || {};
-
     return (
       <div>
-        <h3>LOGIN</h3>
-        <div>{isWaiting}</div>
-        <ul>
-          { errors ? errors.map((error, index) => <li key={index}>{error.messages}</li>) : message }
-        </ul>
-        <Input
-          name="email"
-          value={ email }
-          label="Email"
-          type="email"
-          onChange={ this.onChange }
-        />
-        <Input
-          name="password"
-          value={ password }
-          label="Password"
-          type="password"
-          onChange={ this.onChange }
-        />
-        <button type="submit" onClick={ this.onSubmit }>Submit</button>
+        <div>{ isWaiting }</div>
+        <LoginForm submit={ this.onSubmit } error={ error } />
       </div>
     );
   }
