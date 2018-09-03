@@ -23,8 +23,8 @@ const Wrapper = styled.header`
 export default ({ menu, session }) => {
   const { authenticated } = session;
   const filteredMenu = authenticated ?
-    menu.filter(item => item.authenticated || item.authenticated === undefined) :
-    menu.filter(item => !item.authenticated);
+    menu.filter(item => item.loggedIn || item.loggedIn === undefined) :
+    menu.filter(item => !item.loggedIn);
 
   return (
     <Wrapper>

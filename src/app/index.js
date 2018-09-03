@@ -4,30 +4,10 @@ import { connect } from 'react-redux';
 import styled, { injectGlobal, ThemeProvider } from 'styled-components';
 
 import routes from 'routes';
-import config from './config/app';
-import theme from './shared/themes/default';
+import appConfig from './config/app';
+import menu from './config/menu';
+import theme from './config/themes/default';
 import { Header, Main } from './components';
-
-const menu = [
-  {
-    url: '/',
-    text: 'Home'
-  },
-  {
-    url: '/users',
-    text: 'Users'
-  },
-  {
-    url: '/login',
-    text: 'Log in',
-    authenticated: false
-  },
-  {
-    url: '/logout',
-    text: 'Log out',
-    authenticated: true
-  }
-];
 
 injectGlobal`
   body {
@@ -50,7 +30,7 @@ const Wrapper = styled.div`
 const App = ({ session, location }) => (
   <ThemeProvider theme={ theme }>
     <Wrapper>
-      <Helmet { ...config } />
+      <Helmet { ...appConfig } />
       <Header menu={ menu } session={ session } />
       <Main routes={ routes } location={ location } session={ session } />
     </Wrapper>
