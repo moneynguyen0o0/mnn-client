@@ -64,10 +64,10 @@ export default () => {
         const loadableState = await getLoadableState(RootComponent);
 
         const markup = renderToString(RootComponent);
+        const initialState = store.getState();
         const styleTags = sheet.getStyleTags();
-        const state = store.getState();
         const helmet = Helmet.renderStatic();
-        const body = template({ markup, state, assets, helmet, styleTags, loadableState });
+        const body = template({ markup, initialState, assets, helmet, styleTags, loadableState });
 
         console.log(body);
 

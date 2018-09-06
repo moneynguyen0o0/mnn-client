@@ -24,6 +24,13 @@ export default async (config = {}) => {
 
     return data;
   } catch (error) {
-    throw error;
+    const {
+      response: {
+        data
+      } = {},
+      stack
+    } = error;
+
+    throw data || stack;
   }
 };

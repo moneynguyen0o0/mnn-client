@@ -1,6 +1,6 @@
 import serialize from 'serialize-javascript';
 
-export default ({ markup, state, assets, helmet, styleTags, loadableState }) => {
+export default ({ markup, initialState, assets, helmet, styleTags, loadableState }) => {
   const {
     title,
     meta,
@@ -28,7 +28,7 @@ export default ({ markup, state, assets, helmet, styleTags, loadableState }) => 
         <div id="app">${markup}</div>
         ${loadableState.getScriptTag()}
         <script>
-          window.__INITIAL_STATE__ = ${serialize(state)}
+          window.__INITIAL_STATE__ = ${serialize(initialState)}
         </script>
         ${scripts.map(script => `<script src="${script}"></script>`).join('\n')}
       </body>

@@ -3,9 +3,11 @@ import Helmet from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 import styled, { injectGlobal, ThemeProvider } from 'styled-components';
 
-import { Header } from './components';
+import routes from 'routes';
 import appConfig from './config/app';
-import routes from '../routes';
+import menu from './config/menu';
+import theme from './config/themes/default';
+import { Header } from './components';
 
 injectGlobal`
   body {
@@ -21,19 +23,9 @@ injectGlobal`
   }
 `;
 
-const theme = {
-  palette: {
-    primary: '#1976d2',
-    danger: '#d32f2f',
-    alert: '#ffa000',
-    success: '#388e3c'
-  },
-  fonts: {
-    primary: 'Helvetica Neue, Helvetica, Roboto, sans-serif',
-    pre: 'Consolas, Liberation Mono, Menlo, Courier, monospace',
-    quote: 'Georgia, serif'
-  }
-};
+const Wrapper = styled.div`
+  background: white;
+`;
 
 const Main = styled.main`
   padding: 1em 4em;
@@ -42,9 +34,9 @@ const Main = styled.main`
 
 export default () => (
   <ThemeProvider theme={ theme }>
-    <div>
+    <Wrapper>
       <Helmet { ...appConfig } />
-      <Header />
+      <Header menu={ menu } />
       <Main>
         <Switch>
           {
@@ -54,6 +46,6 @@ export default () => (
           }
         </Switch>
       </Main>
-    </div>
+    </Wrapper>
   </ThemeProvider>
 );

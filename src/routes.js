@@ -27,7 +27,7 @@ export default [
     component: UserDetail,
     exact: true,
     loadData: ({ params }) => [
-      [userSagaWorkers.requestUser, params.id]
+      [userSagaWorkers.requestUser, { id: params.id }]
     ]
   },
   {

@@ -11,6 +11,8 @@ import rootSaga from 'app/store/sagas';
 
 // Get the initial state from server-side rendering
 const initialState = window.__INITIAL_STATE__;
+
+// History config
 const history = createHistory();
 const store = configureStore(history, initialState);
 
@@ -20,8 +22,8 @@ store.runSaga(rootSaga);
 // Load all components needed before starting rendering
 loadComponents().then(() => {
   hydrate(
-    <Provider store={store}>
-      <ConnectedRouter history={history}>
+    <Provider store={ store }>
+      <ConnectedRouter history={ history }>
         <App />
       </ConnectedRouter>
     </Provider>,
