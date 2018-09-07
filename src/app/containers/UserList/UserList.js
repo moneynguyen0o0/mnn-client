@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 import { actions as userActions, selectors as userSelectors } from 'app/store/reducers/user';
-import withLoading from 'app/shared/hoc/withLoading';
+import withLoading from 'app/hoc/withLoading';
 
 const Wrapper = styled.div`
   background: green;

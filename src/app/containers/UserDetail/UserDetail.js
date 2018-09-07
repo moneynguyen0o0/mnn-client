@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import { actions as userActions } from 'app/store/reducers/user';
-import withLoading from 'app/shared/hoc/withLoading';
+import withLoading from 'app/hoc/withLoading';
 
 const Wrapper = styled.div`
   background: orange;
