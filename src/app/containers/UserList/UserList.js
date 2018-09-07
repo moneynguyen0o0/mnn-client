@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
-import { array, object, func } from 'prop-types';
+import { object, array, bool, func } from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import { Link } from 'react-router-dom';
 
 import { actions as userActions, selectors as userSelectors } from 'app/store/reducers/user';
+import withLoading from 'app/shared/hoc/withLoading';
 
 const Wrapper = styled.div`
   background: green;
@@ -16,8 +17,10 @@ class UserList extends PureComponent {
 
   static propTypes = {
     requestUsers: func.isRequired,
+    session: object,
     users: array,
-    session: object
+    error: object,
+    isWaiting: bool
   }
 
   componentDidMount() {
@@ -49,12 +52,21 @@ class UserList extends PureComponent {
 }
 
 const mapStateToProps = state => {
+  const {
+    users: {
+      error, isWaiting
+    },
+    session
+  } = state;
+
   return {
     users: userSelectors.getFilteredUsers(state),
-    session: state.session
+    session,
+    error,
+    isWaiting
   };
 };
 
 export default connect(mapStateToProps, {
   requestUsers: userActions.requestUsers
-})(UserList);
+})(withLoading()(UserList));

@@ -9,6 +9,7 @@ import menu from './config/menu';
 import theme from './config/themes/default';
 import { Header, Main } from './components';
 
+
 injectGlobal`
   body {
     margin: 0;

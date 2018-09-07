@@ -15,7 +15,7 @@ const initialState = window.__INITIAL_STATE__;
 
 // History config
 const history = createHistory();
-const store = configureStore(initialState, history);
+const store = configureStore(history, initialState);
 
 // Run saga watchers
 store.runSaga(rootSaga);

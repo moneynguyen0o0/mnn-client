@@ -4,7 +4,9 @@ import { createSelector } from 'reselect';
 
 export const types = {
   USERS_REQUEST: 'USERS_REQUEST',
-  USERS_RECEIVE: 'USERS_RECEIVE',
+  USERS_REQUESTING: 'USERS_REQUESTING',
+  USERS_RECEIVE_SUCCESS: 'USERS_RECEIVE_SUCCESS',
+  USERS_RECEIVE_ERROR: 'USERS_RECEIVE_ERROR',
 
   USER_REQUEST: 'USER_REQUEST',
   USER_REQUESTING: 'USER_REQUESTING',
@@ -15,7 +17,9 @@ export const types = {
 // ACTIONS
 
 const requestUsers = auth => ({ type: types.USERS_REQUEST, auth });
-const receiveUsers = payload => ({ type: types.USERS_RECEIVE, payload });
+const requestingUsers = () => ({ type: types.USERS_REQUESTING });
+const receiveUsersSuccess = payload => ({ type: types.USERS_RECEIVE_SUCCESS, payload });
+const receiveUsersError = payload => ({ type: types.USERS_RECEIVE_ERROR, payload });
 
 const requestUser = (id, auth) => ({ type: types.USER_REQUEST, id, auth });
 const requestingUser = () => ({ type: types.USER_REQUESTING });
@@ -24,7 +28,10 @@ const receiveUserError = payload => ({ type: types.USER_RECEIVE_ERROR, payload }
 
 export const actions = {
   requestUsers,
-  receiveUsers,
+  requestingUsers,
+  receiveUsersSuccess,
+  receiveUsersError,
+
   requestUser,
   requestingUser,
   receiveUserSuccess,
@@ -33,7 +40,7 @@ export const actions = {
 
 // SELECTORS
 
-const getUsers = state => state.users;
+const getUsers = state => state.users.data;
 
 const getFilteredUsers = createSelector(
   [getUsers],
@@ -47,10 +54,29 @@ export const selectors = {
 
 // REDUCERS
 
-const handleUsers = (state = [], action = {}) => {
+const initialUsersState = {
+  data: [],
+  isWaiting: false,
+  error: null
+};
+
+const handleUsers = (state = initialUsersState, action = {}) => {
   switch (action.type) {
-  case types.USERS_RECEIVE:
-    return action.payload;
+  case types.USERS_REQUESTING:
+    return {
+      ...initialUsersState,
+      isWaiting: true
+    };
+  case types.USERS_RECEIVE_SUCCESS:
+    return {
+      ...initialUsersState,
+      data: action.payload
+    };
+  case types.USERS_RECEIVE_ERROR:
+    return {
+      ...initialUsersState,
+      error: action.payload
+    };
 
   default:
     return state;
@@ -58,12 +84,12 @@ const handleUsers = (state = [], action = {}) => {
 };
 
 const initialUserState = {
-  data: null,
+  data: {},
   isWaiting: false,
   error: null
 };
 
-const handleUer = (state = initialUserState, action = {}) => {
+const handleUser = (state = initialUserState, action = {}) => {
   switch (action.type) {
   case types.USER_REQUESTING:
     return {
@@ -88,5 +114,5 @@ const handleUer = (state = initialUserState, action = {}) => {
 
 export {
   handleUsers as users,
-  handleUer as user
+  handleUser as user
 };

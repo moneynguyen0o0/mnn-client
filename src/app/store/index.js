@@ -6,7 +6,7 @@ import reducer from './reducers';
 
 const sagaMiddleware = createSagaMiddleware();
 
-const configureStore = (initialState, history) => {
+const configureStore = (history, initialState) => {
   const middlewares = [
     sagaMiddleware,
     routerMiddleware(history)

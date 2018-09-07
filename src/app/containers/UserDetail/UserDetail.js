@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react';
-import { object, func } from 'prop-types';
+import { object, bool, func } from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import { actions as userActions } from 'app/store/reducers/user';
+import withLoading from 'app/shared/hoc/withLoading';
 
 const Wrapper = styled.div`
   background: orange;
@@ -16,7 +17,9 @@ class UserDetailPage extends PureComponent {
     match: object.isRequired,
     requestUser: func.isRequired,
     session: object,
-    user: object
+    user: object,
+    error: object,
+    isWaiting: bool
   }
 
   componentDidMount() {
@@ -29,14 +32,16 @@ class UserDetailPage extends PureComponent {
       user,
       requestUser
     } = this.props;
-    
-    if (!user.data && authenticated) {
-      requestUser(match.params.id, auth);
+
+    const id = match.params.id;
+
+    if (user._id !== id && authenticated) {
+      requestUser(id, auth);
     }
   }
 
   render() {
-    const { fullname = '' } = this.props.user.data || {};
+    const { fullname = '' } = this.props.user;
 
     return (
       <Wrapper>
@@ -46,8 +51,17 @@ class UserDetailPage extends PureComponent {
   }
 }
 
-const mapStateToProps = ({ session, user }) => ({ session, user });
+const mapStateToProps = ({ user, session }) => {
+  const { data, error, isWaiting } = user;
 
-export default connect( mapStateToProps, {
+  return {
+    session,
+    user: data,
+    error,
+    isWaiting
+  };
+};
+
+export default connect(mapStateToProps, {
   requestUser: userActions.requestUser
-})(UserDetailPage);
+})(withLoading()(UserDetailPage));

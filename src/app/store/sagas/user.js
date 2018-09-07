@@ -9,16 +9,20 @@ function* requestUsers({ auth }) {
   const cachedUsers = yield select(selectors.getUsers);
 
   if (!cachedUsers || !cachedUsers.length) {
+    yield put(actions.requestingUsers());
+
     try {
       const data = yield call(Api.fetchUsers, auth);
-      yield put(actions.receiveUsers(data));
+      yield put(actions.receiveUsersSuccess(data));
     } catch (err) {
-      console.log('Users request failed', err);
+      yield put(actions.receiveUsersError(err));
     }
   }
 }
 
 function* requestUser({ id, auth }) {
+  yield put(actions.requestingUser());
+
   try {
     const data = yield call(Api.findUser, id, auth);
     yield put(actions.receiveUserSuccess(data));

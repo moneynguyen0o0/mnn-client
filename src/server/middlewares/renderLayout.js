@@ -43,12 +43,12 @@ export default () => {
     const auth = JSON.parse(universalCookies.cookies.auth || null);
 
     const history = createHistory();
-    const store = configureStore({
+    const store = configureStore(history, {
       session: {
         data: auth,
         authenticated: !!auth
       }
-    }, history);
+    });
     const location = req.url;
 
     loadBranchData(store, location, auth).then(async () => {
