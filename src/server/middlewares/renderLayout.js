@@ -4,6 +4,7 @@ import createHistory from 'history/createMemoryHistory';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter, matchPath } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { I18nextProvider } from 'react-i18next';
 import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 import { getLoadableState } from 'loadable-components/server';
 
@@ -40,7 +41,12 @@ export default () => {
   return (req, res, next) => {
     const history = createHistory();
     const store = configureStore(history);
-    const location = req.url;
+    const {
+      url: {
+        location
+      },
+      i18n
+    } = req;
 
     loadBranchData(store, location).then(async () => {
       try {
@@ -48,13 +54,15 @@ export default () => {
         // styled-components supports concurrent ssr, with stylesheet rehydration
         const sheet = new ServerStyleSheet();
         const RootComponent = (
-          <Provider store={ store }>
-            <StaticRouter location={ location } context={ context }>
-              <StyleSheetManager sheet={ sheet.instance }>
-                <App />
-              </StyleSheetManager>
-            </StaticRouter>
-          </Provider>
+          <I18nextProvider i18n={i18n}>
+            <Provider store={ store }>
+              <StaticRouter location={ location } context={ context }>
+                <StyleSheetManager sheet={ sheet.instance }>
+                  <App />
+                </StyleSheetManager>
+              </StaticRouter>
+            </Provider>
+          </I18nextProvider>
         );
 
         const { url, status = 200 } = context;
@@ -67,7 +75,23 @@ export default () => {
         const initialState = store.getState();
         const styleTags = sheet.getStyleTags();
         const helmet = Helmet.renderStatic();
-        const body = template({ markup, initialState, assets, helmet, styleTags, loadableState });
+
+        const initialI18nStore = i18n.languages.reduce((acc, language) => {
+          acc[language] = i18n.services.resourceStore.data[language];
+          return acc;
+        }, {});
+        const initialLanguage = i18n.language;
+
+        const body = template({
+          markup,
+          initialState,
+          assets,
+          helmet,
+          styleTags,
+          loadableState,
+          initialI18nStore,
+          initialLanguage
+        });
 
         console.log(body);
 

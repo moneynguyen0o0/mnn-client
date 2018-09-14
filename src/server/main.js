@@ -4,7 +4,9 @@ import cors from 'cors';
 import compress from 'compression';
 import helmet from 'helmet';
 import favicon from 'serve-favicon';
+import i18nextMiddleware from 'i18next-express-middleware';
 
+import i18n from './i18n';
 import renderLayout from './middlewares/renderLayout';
 import { notFound, handleErrors } from './middlewares/errorHandler';
 import { isProduction, baseURL } from './config/app';
@@ -23,6 +25,8 @@ if (isProduction) {
 
 app.use(favicon(path.resolve(process.cwd(), 'public/favicon.ico')));
 app.use(express.static(path.resolve(process.cwd(), 'public'), { maxAge: 86400000 }));
+
+app.use(i18nextMiddleware.handle(i18n));
 
 // render html
 app.use(renderLayout());
