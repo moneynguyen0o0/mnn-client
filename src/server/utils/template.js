@@ -37,8 +37,8 @@ export default ({
         <div id="app">${markup}</div>
         ${loadableState.getScriptTag()}
         <script>
-          window.__INITIAL_I18N_STORE__ = ${serialize(initialI18nStore)}
           window.__INITIAL_LANGUAGE__ = "${initialLanguage}";
+          window.__INITIAL_I18N_STORE__ = ${serialize(initialI18nStore)}
           window.__INITIAL_STATE__ = ${serialize(initialState)}
         </script>
         ${scripts.map(script => `<script src="${script}"></script>`).join('\n')}
