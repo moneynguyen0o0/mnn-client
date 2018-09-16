@@ -1,10 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { translate } from 'react-i18next';
 import styled from 'styled-components';
 
-const NavLink = ({ item, className }) => <Link to={ item.url } className={ className }>{item.text}</Link>;
+const NavLink = ({ item, className, t }) => <Link to={ item.url } className={ className }>{t(item.key)}</Link>;
 
-const StyledLink = styled(NavLink)`
+const TranslateNavLink = translate('common')(NavLink);
+
+const StyledLink = styled(TranslateNavLink)`
   color: white;
 `;
 

@@ -76,6 +76,7 @@ export default () => {
         const styleTags = sheet.getStyleTags();
         const helmet = Helmet.renderStatic();
 
+        // get initial props passed on loaded i18n data
         const initialI18nStore = i18n.languages.reduce((acc, language) => {
           acc[language] = i18n.services.resourceStore.data[language];
           return acc;

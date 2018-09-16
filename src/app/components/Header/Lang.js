@@ -8,8 +8,12 @@ const Lang = ({ i18n }) => {
 
   return (
     <ul>
-      <li onClick={() => changeLanguage('en')}>en</li>
-      <li onClick={() => changeLanguage('vi')}>vi</li>
+      <li>
+        <button onClick={() => changeLanguage('vi')}>vi</button>
+      </li>
+      <li>
+        <button onClick={() => changeLanguage('en')}>en</button>
+      </li>
     </ul>
   );
 };
