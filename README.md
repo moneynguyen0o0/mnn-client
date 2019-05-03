@@ -15,6 +15,9 @@ npm run dev
 npm run build:prod
 
 npm start
+## MORE
+1. With auth https://github.com/moneynguyen0o0/mnn-client/pull/1
+2. With i18n https://github.com/moneynguyen0o0/mnn-client/pull/2 
 ## TODO
 1. Add webpack hot reload
 2. Docker build
