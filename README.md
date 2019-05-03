@@ -13,6 +13,8 @@ React boilerplate for building client site
 1. Clone https://github.com/moneynguyen0o0/mnn-api as API local
 2. npm install
 ### Development
+npm run build:dev
+
 npm run dev
 ### Production
 npm run build:prod
