@@ -13,6 +13,7 @@ React boilerplate for building client site
 npm run dev
 ### Production
 npm run build:prod
+
 npm start
 ## TODO
 1. Add webpack hot reload
