@@ -1,10 +1,10 @@
 export default [
   {
     url: '/',
-    text: 'Home'
+    key: 'home'
   },
   {
     url: '/users',
-    text: 'Users'
+    key: 'users'
   }
 ];
