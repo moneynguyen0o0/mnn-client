@@ -17,6 +17,7 @@ class UserList extends PureComponent {
 
   static propTypes = {
     requestUsers: func.isRequired,
+    session: object,
     users: array,
     error: object,
     isWaiting: bool
@@ -24,12 +25,16 @@ class UserList extends PureComponent {
 
   componentDidMount() {
     const {
+      session: {
+        authenticated,
+        data: auth
+      },
       users,
       requestUsers
     } = this.props;
 
-    if (!users.length) {
-      requestUsers();
+    if (!users.length && authenticated) {
+      requestUsers(auth);
     }
   }
 
@@ -46,11 +51,17 @@ class UserList extends PureComponent {
   }
 }
 
-const mapStateToProps = (state) => {
-  const { error, isWaiting } = state.users;
+const mapStateToProps = state => {
+  const {
+    users: {
+      error, isWaiting
+    },
+    session
+  } = state;
 
   return {
     users: userSelectors.getFilteredUsers(state),
+    session,
     error,
     isWaiting
   };

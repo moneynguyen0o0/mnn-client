@@ -5,14 +5,14 @@ import * as Api from 'app/utils/api';
 
 // WORKERS
 
-function* requestUsers() {
+function* requestUsers({ auth }) {
   const cachedUsers = yield select(selectors.getUsers);
 
   if (!cachedUsers || !cachedUsers.length) {
     yield put(actions.requestingUsers());
 
     try {
-      const data = yield call(Api.fetchUsers);
+      const data = yield call(Api.fetchUsers, auth);
       yield put(actions.receiveUsersSuccess(data));
     } catch (err) {
       yield put(actions.receiveUsersError(err));
@@ -20,11 +20,11 @@ function* requestUsers() {
   }
 }
 
-function* requestUser({ id }) {
+function* requestUser({ id, auth }) {
   yield put(actions.requestingUser());
 
   try {
-    const data = yield call(Api.findUser, id);
+    const data = yield call(Api.findUser, id, auth);
     yield put(actions.receiveUserSuccess(data));
   } catch (err) {
     yield put(actions.receiveUserError(err));

@@ -1,13 +1,14 @@
 import React from 'react';
 import Helmet from 'react-helmet';
-import { Switch, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
 import styled, { injectGlobal, ThemeProvider } from 'styled-components';
 
 import routes from 'routes';
 import appConfig from './config/app';
 import menu from './config/menu';
 import theme from './config/themes/default';
-import { Header } from './components';
+import { Header, Main } from './components';
+
 
 injectGlobal`
   body {
@@ -27,25 +28,17 @@ const Wrapper = styled.div`
   background: white;
 `;
 
-const Main = styled.main`
-  padding: 1em 4em;
-  background: white;
-`;
-
-export default () => (
+const App = ({ session, location }) => (
   <ThemeProvider theme={ theme }>
     <Wrapper>
       <Helmet { ...appConfig } />
-      <Header menu={ menu } />
-      <Main>
-        <Switch>
-          {
-            routes.map((route, index) => (
-              <Route key={ index } { ...route } />
-            ))
-          }
-        </Switch>
-      </Main>
+      <Header menu={ menu } session={ session } />
+      <Main routes={ routes } location={ location } session={ session } />
     </Wrapper>
   </ThemeProvider>
 );
+
+export default connect(({ session, router }) => ({
+  location: router.location,
+  session: session
+}))(App);

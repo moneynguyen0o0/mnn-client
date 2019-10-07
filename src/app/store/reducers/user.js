@@ -16,12 +16,12 @@ export const types = {
 
 // ACTIONS
 
-const requestUsers = () => ({ type: types.USERS_REQUEST });
+const requestUsers = auth => ({ type: types.USERS_REQUEST, auth });
 const requestingUsers = () => ({ type: types.USERS_REQUESTING });
 const receiveUsersSuccess = payload => ({ type: types.USERS_RECEIVE_SUCCESS, payload });
 const receiveUsersError = payload => ({ type: types.USERS_RECEIVE_ERROR, payload });
 
-const requestUser = (id) => ({ type: types.USER_REQUEST, id });
+const requestUser = (id, auth) => ({ type: types.USER_REQUEST, id, auth });
 const requestingUser = () => ({ type: types.USER_REQUESTING });
 const receiveUserSuccess = payload => ({ type: types.USER_RECEIVE_SUCCESS, payload });
 const receiveUserError = payload => ({ type: types.USER_RECEIVE_ERROR, payload });

@@ -16,6 +16,7 @@ class UserDetailPage extends PureComponent {
   static propTypes = {
     match: object.isRequired,
     requestUser: func.isRequired,
+    session: object,
     user: object,
     error: object,
     isWaiting: bool
@@ -23,6 +24,10 @@ class UserDetailPage extends PureComponent {
 
   componentDidMount() {
     const {
+      session: {
+        authenticated,
+        data: auth
+      },
       match,
       user,
       requestUser
@@ -30,8 +35,8 @@ class UserDetailPage extends PureComponent {
 
     const id = match.params.id;
 
-    if (user._id !== id) {
-      requestUser(id);
+    if (user._id !== id && authenticated) {
+      requestUser(id, auth);
     }
   }
 
@@ -46,10 +51,11 @@ class UserDetailPage extends PureComponent {
   }
 }
 
-const mapStateToProps = ({ user }) => {
+const mapStateToProps = ({ user, session }) => {
   const { data, error, isWaiting } = user;
 
   return {
+    session,
     user: data,
     error,
     isWaiting
